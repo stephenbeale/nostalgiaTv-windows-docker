@@ -1,47 +1,98 @@
 # nostalgiaTv-windows-docker
 
-One-click launcher for [NostalgiaTV Server](https://hub.docker.com/r/purestream711/nostalgiatv-server) on Windows. It turns your Jellyfin, Plex or Emby library into a retro cable-TV experience, with a channel guide, commercials and CRT effects, all in your browser.
+Run **NostalgiaTV** on a Windows PC with one double-click.
 
-## Run it
+## What is this?
 
-1. Clone this repo:
-   ```
-   cd C:\Users\<you>\source\repos
-   git clone https://github.com/stephenbeale/nostalgiaTv-windows-docker
-   ```
-   (or download the ZIP from GitHub), e.g. into `C:\Users\<you>\source\repos\nostalgiaTv-windows-docker`.
-2. Double-click **`start.bat`**.
+[NostalgiaTV Server](https://hub.docker.com/r/purestream711/nostalgiatv-server) turns your own Jellyfin, Plex or Emby library into a 1990s-style cable TV experience. Instead of picking something to watch, you flick through channels with a scrolling TV guide, scheduled shows, ad breaks and CRT effects, all in your browser.
 
-That's it. The script:
+NostalgiaTV Server is normally set up by hand with Docker commands. This repo does all of that for you:
 
-- offers to install Docker Desktop (via `winget`) if you don't have it,
-- starts Docker Desktop if it isn't running,
-- pulls the latest image (so every start is also an update),
-- starts the server and opens **http://localhost:19850** when it's ready.
+- installs Docker Desktop if you don't have it,
+- starts the server and keeps it up to date,
+- opens it in your browser when it's ready.
 
-The server keeps running in the background and restarts by itself whenever Docker Desktop starts. To have it up whenever you log in, turn on *Docker Desktop → Settings → General → Start Docker Desktop when you sign in*.
+You don't need to know anything about Docker.
+
+## What you need
+
+- Windows 10 or 11 (64-bit)
+- A Jellyfin, Plex or Emby server with your films and TV, on this PC or elsewhere on your network
+- About 2 GB of free disk space for Docker and the server
+
+## Quick start
+
+1. **Get the files.** Either:
+   - clone the repo:
+     ```
+     cd C:\Users\<you>\source\repos
+     git clone https://github.com/stephenbeale/nostalgiaTv-windows-docker
+     ```
+   - or click **Code → Download ZIP** on GitHub and unzip it anywhere.
+2. **Double-click `start.bat`.**
+3. Your browser opens at **http://localhost:19850**.
+
+### First run only: installing Docker
+
+If Docker Desktop isn't installed, `start.bat` offers to install it for you.
+
+1. Press **Y** to install it.
+2. **Restart your PC** when the install finishes.
+3. Open **Docker Desktop** from the Start menu once, and accept its terms.
+4. Double-click `start.bat` again.
+
+You only have to do this once.
+
+## Setting up your channels
+
+1. At http://localhost:19850, choose your media server (**Jellyfin**, **Plex** or **Emby**) and sign in.
+   - **Jellyfin on this same PC:** use the server address `http://host.docker.internal:8096`. `localhost` won't work, because the server runs inside Docker.
+   - **Jellyfin on another machine:** use its network address, e.g. `http://192.168.1.50:8096`.
+2. Choose which libraries to include. Wait a minute or two while it indexes them.
+3. Open the **Watch** page and start channel-surfing.
+4. To customise channels, ad breaks, themes and profiles, use the mode switcher in the top bar to go to **Configure** (`/configure`).
+
+## Day-to-day use
 
 | File | What it does |
 |------|--------------|
-| `start.bat` | Install, start, update and open in the browser |
-| `stop.bat`  | Stop the server (settings are kept) |
-| `logs.bat`  | Show live server logs |
+| `start.bat` | Starts NostalgiaTV, updates it to the latest version and opens your browser. Safe to run at any time. |
+| `stop.bat`  | Stops NostalgiaTV. Your channels and settings are kept. |
+| `logs.bat`  | Shows what the server is doing. Useful if something isn't working. |
 
-## First-time setup in the browser
+Once started, NostalgiaTV keeps running in the background and comes back by itself whenever Docker Desktop starts. To have it always available, turn on **Docker Desktop → Settings → General → Start Docker Desktop when you sign in**. After that, just bookmark http://localhost:19850.
 
-1. At http://localhost:19850, choose **Jellyfin** (or Plex/Emby) and sign in.
-   - If Jellyfin runs **on this same PC**, use the server URL `http://host.docker.internal:8096`. `localhost` won't work from inside the container.
-   - If it runs on another machine, use its LAN address, e.g. `http://192.168.1.50:8096`.
-2. Choose your libraries and let the index build.
-3. Go to `/configure` to adjust channels, commercials and themes.
+**Updating:** every time you run `start.bat`, it downloads the latest version.
 
-## Extras
+## Watching on other devices
 
-- **Other devices / TVs:** open `http://<this-pc-ip>:19850` from any device on your network. Windows Firewall may ask you to allow Docker the first time.
-- **Use it as a tuner in Jellyfin/Plex/TiviMate:** M3U `http://<pc-ip>:19850/channels.m3u`, EPG `http://<pc-ip>:19850/xmltv.xml`.
-- **Timezone:** defaults to `Europe/London`. To change it, create a `.env` file next to `docker-compose.yml` containing e.g. `TZ=America/New_York`, then run `start.bat` again.
-- **Backups:** your settings live in the `data\` and `config\` folders. Back them up together.
+- **Another PC, phone or tablet:** open `http://<this-pc-ip>:19850` in a browser. To find the PC's IP address, run `ipconfig` and look for the *IPv4 Address*. Windows Firewall may ask you to allow Docker the first time; click **Allow**.
+- **A smart TV or Fire Stick:** NostalgiaTV also acts as a TV tuner. In TiviMate, Jellyfin Live TV, Plex DVR or any IPTV app, add:
+  - Playlist (M3U): `http://<this-pc-ip>:19850/channels.m3u`
+  - Guide (XMLTV): `http://<this-pc-ip>:19850/xmltv.xml`
+- **NostalgiaTV Android app:** this server also works as the app's *Docker Mode* backend. In the app, go to **Settings → Admin → Docker Mode** and enter `http://<this-pc-ip>:19850`.
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| "Docker did not start after 3 minutes" | Open Docker Desktop from the Start menu and wait for it to say *Engine running*, then run `start.bat` again. |
+| Browser shows "can't reach this page" | The server may still be starting. Wait 30 seconds and refresh. If that doesn't work, run `logs.bat` and look for errors. |
+| Can't connect to Jellyfin | If Jellyfin is on this PC, use `http://host.docker.internal:8096`, not `localhost`. Otherwise, check that the address opens Jellyfin in your browser. |
+| Times in the guide are wrong | See *Timezone* under Settings below. |
+| Port 19850 already in use | Something else is using that port. Change the left-hand number in `docker-compose.yml` (e.g. `"19851:19850"`) and use that number in the browser address instead. |
+
+## Settings
+
+- **Timezone:** defaults to UK time (`Europe/London`). To change it, create a file called `.env` in this folder containing one line, e.g. `TZ=America/New_York`. Then run `start.bat`.
+- **Your data:** channels, profiles and settings are stored in the `data\` and `config\` folders here. To back up, copy both folders together. Git ignores them, so they never get uploaded.
+
+## Uninstalling
+
+1. Run `stop.bat`.
+2. Delete this folder.
+3. Optionally, remove the image in **Docker Desktop → Images** (`purestream711/nostalgiatv-server`), or uninstall Docker Desktop.
 
 ## Licence
 
-The launcher scripts in this repo are MIT licensed (see `LICENSE`). NostalgiaTV Server itself is a separate project by its own author, pulled from Docker Hub, and is not covered by this licence.
+The launcher scripts in this repo are MIT licensed (see `LICENSE`). NostalgiaTV Server is a separate project by its own author, downloaded from Docker Hub, and isn't covered by this licence.
