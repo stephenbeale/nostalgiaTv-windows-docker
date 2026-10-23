@@ -14,11 +14,35 @@ NostalgiaTV Server is normally set up by hand with Docker commands. This repo do
 
 You don't need to know anything about Docker.
 
-## What you need
+## Prerequisites
 
-- Windows 10 or 11 (64-bit)
-- A Jellyfin, Plex or Emby server with your films and TV, on this PC or elsewhere on your network
-- About 2 GB of free disk space for Docker and the server
+### Your PC
+
+| Requirement | Details |
+|-------------|---------|
+| **Windows 10 (22H2 or later) or Windows 11, 64-bit** | Check in **Settings → System → About**. |
+| **8 GB RAM** recommended (4 GB minimum) | Docker Desktop uses about 2 GB by itself. |
+| **About 3 GB of free disk space** | For Docker Desktop and the NostalgiaTV server. Your media isn't copied, so it needs no extra space. |
+| **Virtualisation turned on** | Docker needs this. Check in **Task Manager → Performance → CPU**, where it should say *Virtualization: Enabled*. If it says *Disabled*, turn on *Intel VT-x* / *AMD-V* (sometimes called *SVM*) in your PC's BIOS. Most modern PCs have it on already. |
+| **Administrator rights** | Needed once, to install Docker Desktop. |
+| **Internet connection** | Needed for the first download (about 1 GB) and for updates. |
+
+### Software
+
+| Requirement | Details |
+|-------------|---------|
+| **Docker Desktop** | `start.bat` installs it for you, using `winget`, which comes with Windows 10/11. You can also install it yourself from [docker.com](https://www.docker.com/products/docker-desktop/). It needs **WSL 2**, which its installer sets up. If it asks you to, run `wsl --install` in an admin terminal and restart. |
+| **Git** (optional) | Only needed if you want to `git clone` the repo. Otherwise, download the ZIP from GitHub. |
+
+### Your media
+
+| Requirement | Details |
+|-------------|---------|
+| **A Jellyfin, Plex or Emby server** | Already set up with your films and TV, on this PC or another machine on your network. NostalgiaTV streams from it; it doesn't play files directly. |
+| **A login for that server** | NostalgiaTV signs in to your media server with this account, so it needs access to the libraries you want on TV. |
+| **The server's address** | e.g. `http://192.168.1.50:8096` for Jellyfin, or `http://host.docker.internal:8096` if it's on this PC. |
+
+To watch on other devices (TV, phone, another PC), they must be on the **same home network** as this PC.
 
 ## Quick start
 
