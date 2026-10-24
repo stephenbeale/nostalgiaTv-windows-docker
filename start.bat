@@ -39,7 +39,29 @@ pause
 exit /b 1
 
 :running
-rem --- 3. Pull latest image (skipped quietly if offline) and start -----------
+rem --- 3. Data folder: one fixed place, whichever copy of this folder runs ---
+if exist ".env" for /f "usebackq tokens=1,* delims==" %%a in (".env") do (
+    if /i "%%a"=="NTV_DATA_DIR" set "NTV_DATA_DIR=%%b"
+)
+if not defined NTV_DATA_DIR set "NTV_DATA_DIR=%LOCALAPPDATA%\NostalgiaTV"
+rem First time only: copy data\, config\ and logos\ from this folder across.
+rem The originals are left in place as a backup.
+if exist "%NTV_DATA_DIR%\config\profiles.json" goto :datadone
+if not exist "config\profiles.json" goto :datadone
+echo Moving your NostalgiaTV data to %NTV_DATA_DIR%...
+docker stop nostalgiatv-server >nul 2>&1
+for %%f in (data config logos) do (
+    if exist "%%f" robocopy "%%f" "%NTV_DATA_DIR%\%%f" /E /NFL /NDL /NJH /NJS /NP >nul
+)
+if not exist "%NTV_DATA_DIR%\config\profiles.json" (
+    echo Couldn't copy your data to %NTV_DATA_DIR%. Nothing was changed.
+    pause
+    exit /b 1
+)
+echo Done. The old data\ and config\ folders here are kept as a backup.
+:datadone
+
+rem --- 4. Pull latest image (skipped quietly if offline) and start -----------
 echo Checking for updates...
 docker compose pull -q >nul 2>&1
 docker compose up -d
@@ -49,7 +71,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-rem --- 4. Wait until the server answers, then open the browser --------------
+rem --- 5. Wait until the server answers, then open the browser --------------
 echo Waiting for NostalgiaTV to come up...
 set /a tries=0
 :waitapp

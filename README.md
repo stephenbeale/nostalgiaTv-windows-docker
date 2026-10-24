@@ -105,17 +105,19 @@ Once started, NostalgiaTV keeps running in the background and comes back by itse
 | Browser shows "can't reach this page" | The server may still be starting. Wait 30 seconds and refresh. If that doesn't work, run `logs.bat` and look for errors. |
 | Can't connect to Jellyfin | If Jellyfin is on this PC, use `http://host.docker.internal:8096`, not `localhost`. Otherwise, check that the address opens Jellyfin in your browser. |
 | Times in the guide are wrong | See *Timezone* under Settings below. |
+| Profile or channels missing | Check your profile is in `%LOCALAPPDATA%\NostalgiaTV\config\profiles`. If you used an older version, your data may still be in `data\` and `config\` next to `start.bat`; see *Upgrading from an older version* under Settings. |
 | Port 19850 already in use | Something else is using that port. Change the left-hand number in `docker-compose.yml` (e.g. `"19851:19850"`) and use that number in the browser address instead. |
 
 ## Settings
 
 - **Timezone:** defaults to UK time (`Europe/London`). To change it, create a file called `.env` in this folder containing one line, e.g. `TZ=America/New_York`. Then run `start.bat`.
-- **Your data:** channels, profiles and settings are stored in the `data\` and `config\` folders here. To back up, copy both folders together. Git ignores them, so they never get uploaded.
+- **Your data:** channels, profiles and settings are stored in `%LOCALAPPDATA%\NostalgiaTV` (paste that into File Explorer's address bar), not in this folder. That means any copy of this folder uses the same profiles and channels. To back up, copy that whole folder. To keep it somewhere else, add a line like `NTV_DATA_DIR=D:\NostalgiaTV` to `.env`.
+- **Upgrading from an older version:** the first time `start.bat` runs, it copies the `data\`, `config\` and `logos\` folders from here to `%LOCALAPPDATA%\NostalgiaTV`. It only does this if that folder doesn't already hold a profile. The old folders are left as a backup; delete them once you're happy. Run it the first time from the folder that holds your real data.
 
 ## Uninstalling
 
 1. Run `stop.bat`.
-2. Delete this folder.
+2. Delete this folder, and `%LOCALAPPDATA%\NostalgiaTV` too if you don't want to keep your channels and profiles.
 3. Optionally, remove the image in **Docker Desktop → Images** (`purestream711/nostalgiatv-server`), or uninstall Docker Desktop.
 
 ## Licence
