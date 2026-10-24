@@ -125,6 +125,7 @@ If you open Docker Desktop yourself (or it starts when you sign in), NostalgiaTV
 | Times in the guide are wrong | See *Timezone* under Settings below. |
 | Profile or channels missing | Check your profile is in `%LOCALAPPDATA%\NostalgiaTV\config\profiles`. If you used an older version, your data may still be in `data\` and `config\` next to `start.bat`; see *Upgrading from an older version* under Settings. |
 | Port 19850 already in use | Something else is using that port. Change the left-hand number in `docker-compose.yml` (e.g. `"19851:19850"`) and use that number in the browser address instead. |
+| Profile/settings disappeared after starting from a different folder | Your data is stored in `data/` and `config/` next to `start.bat`. Run `start.bat` from the folder you originally used, or copy those folders across. |
 
 ## Settings
 
