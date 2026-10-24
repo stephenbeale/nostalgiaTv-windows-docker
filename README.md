@@ -72,7 +72,7 @@ You only have to do this once.
 1. At http://localhost:19850, choose your media server (**Jellyfin**, **Plex** or **Emby**) and sign in.
    - **Jellyfin on this same PC:** use the server address `http://host.docker.internal:8096`. `localhost` won't work, because the server runs inside Docker.
    - **Jellyfin on another machine:** use its network address, e.g. `http://192.168.1.50:8096`.
-   - **Not sure of the address?** Double-click `jellyfin-address.bat` on the PC running Jellyfin. It finds Jellyfin's port and the PC's IPv4 address, prints e.g. `http://192.168.1.100:8096`, and copies it to the clipboard.
+   - **Not sure of the address?** On first run, `start.bat` shows it for you (until a Jellyfin server is saved). Any time after that, double-click `jellyfin-address.bat` on the PC running Jellyfin. It finds Jellyfin's port and the PC's IPv4 address, prints e.g. `http://192.168.1.100:8096`, and copies it to the clipboard.
 2. Choose which libraries to include. Wait a minute or two while it indexes them.
 3. Open the **Watch** page and start channel-surfing.
 4. To customise channels, ad breaks, themes and profiles, use the mode switcher in the top bar to go to **Configure** (`/configure`).
@@ -94,6 +94,7 @@ javascript:(()=>{const d=[];for(const l of document.body.innerText.split('\n')){
 | `start.bat` | Starts NostalgiaTV, updates it to the latest version and offers to open your browser. Safe to run at any time. |
 | `stop.bat`  | Stops NostalgiaTV. Your channels and settings are kept. |
 | `logs.bat`  | Shows what the server is doing. Useful if something isn't working. |
+| `jellyfin-address.bat` | Shows the address to give NostalgiaTV for your Jellyfin server, and copies it to the clipboard. Run it on the PC running Jellyfin. |
 
 Once started, NostalgiaTV keeps running in the background and comes back by itself whenever Docker Desktop starts. To have it always available, turn on **Docker Desktop → Settings → General → Start Docker Desktop when you sign in**. After that, just bookmark http://localhost:19850.
 
@@ -121,7 +122,7 @@ If you open Docker Desktop yourself (or it starts when you sign in), NostalgiaTV
 |---------|-----|
 | "Docker did not start after 3 minutes" | Open Docker Desktop from the Start menu and wait for it to say *Engine running*, then run `start.bat` again. |
 | Browser shows "can't reach this page" | The server may still be starting. Wait 30 seconds and refresh. If that doesn't work, run `logs.bat` and look for errors. |
-| Can't connect to Jellyfin | If Jellyfin is on this PC, use `http://host.docker.internal:8096`, not `localhost`. Otherwise, check that the address opens Jellyfin in your browser. |
+| Can't connect to Jellyfin | If Jellyfin is on this PC, use `http://host.docker.internal:8096`, not `localhost`. Otherwise, check that the address opens Jellyfin in your browser. Not sure what the address is? Double-click `jellyfin-address.bat` on the PC running Jellyfin. |
 | Times in the guide are wrong | See *Timezone* under Settings below. |
 | Profile or channels missing | Check your profile is in `%LOCALAPPDATA%\NostalgiaTV\config\profiles`. If you used an older version, your data may still be in `data\` and `config\` next to `start.bat`; see *Upgrading from an older version* under Settings. |
 | Port 19850 already in use | Something else is using that port. Change the left-hand number in `docker-compose.yml` (e.g. `"19851:19850"`) and use that number in the browser address instead. |
