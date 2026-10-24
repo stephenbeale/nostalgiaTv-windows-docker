@@ -83,6 +83,14 @@ timeout /t 2 /nobreak >nul
 goto :waitapp
 
 :ready
+rem --- 6. First run (no Jellyfin server saved yet): show its address ---------
+set "FIRSTRUN="
+if not exist "%NTV_DATA_DIR%\config\jellyfin_servers.json" set "FIRSTRUN=1"
+if defined FIRSTRUN (
+    echo.
+    echo First-time setup: when NostalgiaTV asks for your Jellyfin server, paste this address.
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0jellyfin-address.ps1"
+)
 echo.
 echo NostalgiaTV is running at %URL%
 echo.
@@ -92,7 +100,12 @@ if not errorlevel 2 start "" "%URL%"
 echo.
 echo It keeps running in the background (and restarts with Docker Desktop).
 echo Use stop.bat to shut it down.
-timeout /t 8 >nul
+if defined FIRSTRUN (
+    echo.
+    pause
+) else (
+    timeout /t 8 >nul
+)
 exit /b 0
 
 :notready
