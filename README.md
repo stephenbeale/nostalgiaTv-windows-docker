@@ -72,6 +72,7 @@ You only have to do this once.
 1. At http://localhost:19850, choose your media server (**Jellyfin**, **Plex** or **Emby**) and sign in.
    - **Jellyfin on this same PC:** use the server address `http://host.docker.internal:8096`. `localhost` won't work, because the server runs inside Docker.
    - **Jellyfin on another machine:** use its network address, e.g. `http://192.168.1.50:8096`.
+   - **Not sure of the address?** Double-click `jellyfin-address.bat` on the PC running Jellyfin. It finds Jellyfin's port and the PC's IPv4 address, prints e.g. `http://192.168.1.100:8096`, and copies it to the clipboard.
 2. Choose which libraries to include. Wait a minute or two while it indexes them.
 3. Open the **Watch** page and start channel-surfing.
 4. To customise channels, ad breaks, themes and profiles, use the mode switcher in the top bar to go to **Configure** (`/configure`).
