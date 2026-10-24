@@ -10,7 +10,7 @@ NostalgiaTV Server is normally set up by hand with Docker commands. This repo do
 
 - installs Docker Desktop if you don't have it,
 - starts the server and keeps it up to date,
-- opens it in your browser when it's ready.
+- offers to open it in your browser when it's ready.
 
 You don't need to know anything about Docker.
 
@@ -54,7 +54,7 @@ To watch on other devices (TV, phone, another PC), they must be on the **same ho
      ```
    - or click **Code → Download ZIP** on GitHub and unzip it anywhere.
 2. **Double-click `start.bat`.**
-3. Your browser opens at **http://localhost:19850**.
+3. When it asks *Open NostalgiaTV in your browser now?*, press **Y** (or wait 30 seconds) and your browser opens at **http://localhost:19850**.
 
 ### First run only: installing Docker
 
@@ -81,7 +81,7 @@ You only have to do this once.
 
 | File | What it does |
 |------|--------------|
-| `start.bat` | Starts NostalgiaTV, updates it to the latest version and opens your browser. Safe to run at any time. |
+| `start.bat` | Starts NostalgiaTV, updates it to the latest version and offers to open your browser. Safe to run at any time. |
 | `stop.bat`  | Stops NostalgiaTV. Your channels and settings are kept. |
 | `logs.bat`  | Shows what the server is doing. Useful if something isn't working. |
 
