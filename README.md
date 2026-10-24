@@ -77,6 +77,16 @@ You only have to do this once.
 3. Open the **Watch** page and start channel-surfing.
 4. To customise channels, ad breaks, themes and profiles, use the mode switcher in the top bar to go to **Configure** (`/configure`).
 
+### Tip: copying the Quick Connect code (untested)
+
+The Quick Connect screen comes from the NostalgiaTV image, so this repo can't change it. If the code is shown one digit per line, you can make a bookmark whose address (URL) is the line below. Click it on that screen to copy the code.
+
+```
+javascript:(()=>{const d=[];for(const l of document.body.innerText.split('\n')){const t=l.trim();if(/^\d$/.test(t))d.push(t);else if(d.length>=4)break;else d.length=0;}const c=d.join('');if(!c)return alert('No code found');navigator.clipboard?navigator.clipboard.writeText(c).then(()=>alert('Copied '+c)):prompt('Copy this:',c);})()
+```
+
+**Not yet tried on the live page**; the logic has only been checked on pasted text. Browsers only allow clipboard access on `localhost` or https, so over a LAN address (e.g. `http://192.168.1.50:19850`) it shows a box to copy from instead.
+
 ## Day-to-day use
 
 | File | What it does |
@@ -86,6 +96,14 @@ You only have to do this once.
 | `logs.bat`  | Shows what the server is doing. Useful if something isn't working. |
 
 Once started, NostalgiaTV keeps running in the background and comes back by itself whenever Docker Desktop starts. To have it always available, turn on **Docker Desktop → Settings → General → Start Docker Desktop when you sign in**. After that, just bookmark http://localhost:19850.
+
+### Opening it later, or starting Docker Desktop directly
+
+If you open Docker Desktop yourself (or it starts when you sign in), NostalgiaTV starts automatically, but `start.bat` doesn't run, so you won't get the browser prompt. You can:
+
+- go to http://localhost:19850, or
+- open the **Containers** tab in Docker Desktop and click the **19850:19850** port link, or
+- run `start.bat` to get the prompt (and the latest version).
 
 **Updating:** every time you run `start.bat`, it downloads the latest version.
 
