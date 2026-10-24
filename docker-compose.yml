@@ -5,9 +5,12 @@ services:
     ports:
       - "19850:19850"
     volumes:
-      - ./data:/app/data
-      - ./config:/app/config
-      - ./logos:/app/logos
+      # One fixed data folder, whichever copy of this folder starts the server.
+      # start.bat sets NTV_DATA_DIR (default %LOCALAPPDATA%\NostalgiaTV); to use
+      # somewhere else, put e.g. NTV_DATA_DIR=D:\NostalgiaTV in a .env file.
+      - ${NTV_DATA_DIR:-${LOCALAPPDATA}/NostalgiaTV}/data:/app/data
+      - ${NTV_DATA_DIR:-${LOCALAPPDATA}/NostalgiaTV}/config:/app/config
+      - ${NTV_DATA_DIR:-${LOCALAPPDATA}/NostalgiaTV}/logos:/app/logos
     environment:
       # Change in a .env file next to this one, e.g. TZ=America/New_York
       - TZ=${TZ:-Europe/London}
