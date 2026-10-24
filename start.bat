@@ -71,25 +71,36 @@ if errorlevel 1 (
     exit /b 1
 )
 
-rem --- 5. Wait until the server answers, then open the browser --------------
+rem --- 5. Wait until the server answers, then offer to open the browser ----
 echo Waiting for NostalgiaTV to come up...
 set /a tries=0
 :waitapp
 curl -fs "%URL%/health" >nul 2>&1
 if not errorlevel 1 goto :ready
 set /a tries+=1
-if %tries% geq 60 goto :ready
+if %tries% geq 60 goto :notready
 timeout /t 2 /nobreak >nul
 goto :waitapp
 
 :ready
-start "" "%URL%"
 echo.
 echo NostalgiaTV is running at %URL%
+echo.
+rem Defaults to Yes after 30 seconds so an unattended start still opens it
+choice /c YN /t 30 /d Y /m "Open NostalgiaTV in your browser now"
+if not errorlevel 2 start "" "%URL%"
+echo.
 echo It keeps running in the background (and restarts with Docker Desktop).
 echo Use stop.bat to shut it down.
 timeout /t 8 >nul
 exit /b 0
+
+:notready
+echo.
+echo NostalgiaTV did not respond after 2 minutes. Run logs.bat to see what
+echo went wrong, or try opening %URL% in your browser in a minute.
+pause
+exit /b 1
 
 :nodocker
 echo Install Docker Desktop from https://www.docker.com/products/docker-desktop/ then run this again.
