@@ -91,6 +91,12 @@ if defined FIRSTRUN (
     echo First-time setup: when NostalgiaTV asks for your Jellyfin server, paste this address.
     powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0jellyfin-address.ps1"
 )
+rem --- 7. Can the server reach Jellyfin? (warns only; streams 502 if not) ----
+set "JFWARN="
+if not defined FIRSTRUN (
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0jellyfin-check.ps1" -ServersFile "%NTV_DATA_DIR%\config\jellyfin_servers.json"
+    if errorlevel 1 set "JFWARN=1"
+)
 echo.
 echo NostalgiaTV is running at %URL%
 echo.
@@ -100,7 +106,8 @@ if not errorlevel 2 start "" "%URL%"
 echo.
 echo It keeps running in the background (and restarts with Docker Desktop).
 echo Use stop.bat to shut it down.
-if defined FIRSTRUN (
+set "KEEPOPEN=%FIRSTRUN%%JFWARN%"
+if defined KEEPOPEN (
     echo.
     pause
 ) else (
